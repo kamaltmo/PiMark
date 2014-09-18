@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Pi Mark</string>
+    <string name="action_settings">Settings</string>
+    <string name="drawer_open">Slider Menu Open</string>
+    <string name="drawer_closed">Slider Menu Closed</string>
+
+    <!-- Drawer Items -->
+    <string-array name="nav_drawer_items">
+        <item>Benchmark</item>
+        <item>My Pi</item>
+        <item>Compare</item>
+    </string-array>
+
+    <!-- Drawer Icons-->
+    <array name="nav_drawer_icons">
+        <!-- add items that are the icons in the drawable eg @drawable/ic_benchmark -->
+        <item>@drawable/ic_benchmark</item>
+        <item>@drawable/ic_my_pi</item>
+        <item>@drawable/ic_compare</item>
+    </array>
+
+    <!-- Content Description -->
+    <string name="desc_list_item_icon">Item Icon</string>
+</resources>

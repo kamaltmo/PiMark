@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Pi Mark</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">About</string>
     <string name="drawer_open">Slider Menu Open</string>
     <string name="drawer_closed">Slider Menu Closed</string>
 
@@ -12,6 +12,16 @@
         <item>My Pi</item>
         <item>Compare</item>
     </string-array>
+    
+    <string-array name="spec_titles">
+        <item>Manufacture</item>
+        <item>Model</item>
+        <item>Chipset</item>
+        <item>CPU</item>
+        <item>GPU</item>
+        <item>RAM</item>
+        <item>Version</item>
+    </string-array>
 
     <!-- Drawer Icons-->
     <array name="nav_drawer_icons">
@@ -19,6 +29,16 @@
         <item>@drawable/ic_benchmark</item>
         <item>@drawable/ic_my_pi</item>
         <item>@drawable/ic_compare</item>
+    </array>
+
+    <array name="spec_icons">
+        <item>@drawable/ic_manufacturer</item>
+        <item>@drawable/ic_model</item>
+        <item>@drawable/ic_chipset</item>
+        <item>@drawable/ic_cpu</item>
+        <item>@drawable/ic_gpu</item>
+        <item>@drawable/ic_ram</item>
+        <item>@drawable/ic_version</item>
     </array>
 
     <!-- Content Description -->

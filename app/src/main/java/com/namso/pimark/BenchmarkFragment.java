@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.namso.smartspecs.SpecSheet;
@@ -25,7 +26,6 @@ public class BenchmarkFragment extends Fragment {
 
     ListView specList;
     String[] specTitles;
-    String[] specValues;
     TypedArray specIcons;
     View rootView;
 
@@ -62,17 +62,20 @@ class SpecListAdapter extends ArrayAdapter<String> {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View specRow = inflater.inflate(R.layout.spec_row, parent, false);
+        View benchRow = inflater.inflate(R.layout.benchmark_row, parent, false);
 
         ImageView myImage = (ImageView) specRow.findViewById(R.id.imageView);
         TextView myTitle = (TextView) specRow.findViewById(R.id.specTitle);
         TextView myValue = (TextView) specRow.findViewById(R.id.specValue);
+        ProgressBar progressBar = (ProgressBar) specRow.findViewById(R.id.progressBar);
 
         myImage.setImageResource(specIcons.getResourceId(position, -1));
         myTitle.setText(specTitles[position]);
 
         String manufacturer = Build.MANUFACTURER;
         String model = Build.MODEL;
-        SpecSheet phone = new SpecSheet(model);
+        String version = Build.VERSION.RELEASE;
+        SpecSheet phone = new SpecSheet(model, true, context);
 
         switch (position) {
             case 0:
@@ -82,7 +85,7 @@ class SpecListAdapter extends ArrayAdapter<String> {
                 myValue.setText(model);
                 break;
             case 2:
-                phone.setChipset(myValue);
+                phone.setChipset(myValue,progressBar);
                 break;
             case 3:
                 phone.setCpu(myValue);
@@ -94,8 +97,11 @@ class SpecListAdapter extends ArrayAdapter<String> {
                 phone.setRam(myValue);
                 break;
             case 6:
-                phone.setOS(myValue);
+                myValue.setText("Android " + version);
                 break;
+            case 7:
+                myValue.setText("");
+                specRow = benchRow;
             default:
                 myValue.setText("");
         }

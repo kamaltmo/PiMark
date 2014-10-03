@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -39,6 +40,7 @@ public class BenchmarkFragment extends Fragment {
        specList = (ListView) rootView.findViewById(R.id.specList);
        SpecListAdapter adapter = new SpecListAdapter(getActivity(), specTitles, specIcons);
        specList.setAdapter(adapter);
+
        return rootView;
     }
 }
@@ -57,12 +59,12 @@ class SpecListAdapter extends ArrayAdapter<String> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, final View convertView, ViewGroup parent){
 
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View specRow = inflater.inflate(R.layout.spec_row, parent, false);
-        View benchRow = inflater.inflate(R.layout.benchmark_row, parent, false);
+        final View benchRow = inflater.inflate(R.layout.benchmark_row, parent, false);
 
         ImageView myImage = (ImageView) specRow.findViewById(R.id.imageView);
         TextView myTitle = (TextView) specRow.findViewById(R.id.specTitle);
@@ -102,6 +104,14 @@ class SpecListAdapter extends ArrayAdapter<String> {
             case 7:
                 myValue.setText("");
                 specRow = benchRow;
+                Button start = (Button) specRow.findViewById(R.id.button);
+                start.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Benchmark piMark = new Benchmark(benchRow);
+                        piMark.startBenchmark();
+                    }
+                });
             default:
                 myValue.setText("");
         }

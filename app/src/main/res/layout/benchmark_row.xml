@@ -4,7 +4,7 @@
     android:layout_width="match_parent" android:layout_height="wrap_content">
 
     <ImageView
-        android:src="@drawable/ic_benchmark"
+        android:src="@drawable/ic_benchmark2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
@@ -31,6 +31,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Score: "
         android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp"
         android:layout_below="@id/textView"
         android:id="@+id/textView3"
         android:layout_alignLeft="@+id/textView"
@@ -40,12 +41,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text=""
+        android:text="N/A"
         android:id="@+id/textView4"
         android:textColor="#33B5E5"
         android:layout_alignBottom = "@id/textView3"
         android:layout_toRightOf="@+id/textView3"
-        android:layout_toEndOf="@+id/textView3" />
+        android:layout_toEndOf="@+id/textView3"
+        android:textStyle="bold" />
 
     <Button
         android:layout_width="wrap_content"

@@ -24,6 +24,10 @@ public class PiMark extends Activity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
+    private Fragment[] fragments;
+    private boolean updatePi = true;
+    int position;
+    FragmentManager fragmentManager = getFragmentManager();
 
     //drawer title
     private  CharSequence mDrawerTitle;
@@ -42,6 +46,11 @@ public class PiMark extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pi_mark);
+
+        fragments = new Fragment[3];
+        fragments[0] = new BenchmarkFragment();
+        fragments[1] = new MyPiFragment();
+        fragments[2] = new CompareFragment();
 
         mTitle = mDrawerTitle = getTitle();
 
@@ -78,6 +87,7 @@ public class PiMark extends Activity {
                 getActionBar().setTitle(mTitle);
                 // calling onPrepareOptionsMenu() to show action bar icons
                 invalidateOptionsMenu();
+
             }
 
             public void onDrawerOpened(View drawerView) {
@@ -92,6 +102,8 @@ public class PiMark extends Activity {
             displayView(0);
         }
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
+
+
     }
 
 
@@ -154,28 +166,55 @@ public class PiMark extends Activity {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             displayView(position);
         }
-     }
+    }
 
     private void displayView(int position) {
         Fragment fragment = null;
-        switch (position) {
-            case 0:
-                fragment = new BenchmarkFragment();
-                break;
-            case 1:
-                fragment = new MyPiFragment();
-                break;
-            case 2:
-                fragment = new CompareFragment();
-                break;
-            default:
-                break;
-        }
+        this.position = position;
 
-        if (fragment != null){
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.frame_container, fragment).commit();
+        if (fragments[0] != null && fragments[1] != null && fragments[2] != null) {
+            if(fragmentManager.findFragmentByTag("A") == null) {
+                fragmentManager.beginTransaction()
+                        .add(R.id.frame_container, fragments[0], "A")
+                        .add(R.id.frame_container, fragments[1], "B")
+                        .add(R.id.frame_container, fragments[2], "C")
+                        .hide(fragments[1])
+                        .hide(fragments[2])
+                        .commit();
+            }
+
+            switch (position) {
+                case 0:
+                    fragmentManager.beginTransaction()
+                            .hide(fragments[2])
+                            .hide(fragments[1])
+                            .show(fragments[0])
+                            .commit();
+                    break;
+                case 1:
+                        if (updatePi) {
+                            fragmentManager.beginTransaction()
+                                    .remove(fragmentManager.findFragmentByTag("B"))
+                                    .add(R.id.frame_container, fragments[1] = new MyPiFragment(), "B")
+                                    .commit();
+                            updatePi = false;
+                        }
+                            fragmentManager.beginTransaction()
+                                    .hide(fragments[2])
+                                    .hide(fragments[0])
+                                    .show(fragments[1])
+                                    .commit();
+                            break;
+                case 2:
+                    fragmentManager.beginTransaction()
+                            .hide(fragments[1])
+                            .hide(fragments[0])
+                            .show(fragments[2])
+                            .commit();
+                    break;
+                default:
+                    break;
+            }
             mDrawerList.setItemChecked(position, true);
             mDrawerList.setSelection(position);
             setTitle(navMenuTitles[position]);
@@ -183,5 +222,9 @@ public class PiMark extends Activity {
         } else {
             Log.e("MainActivity", "Error in selecting fragment");
         }
+    }
+
+    public void toggleUpdatePi(){
+        updatePi = !updatePi;
     }
 }

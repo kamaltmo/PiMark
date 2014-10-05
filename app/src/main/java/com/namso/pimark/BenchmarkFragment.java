@@ -1,10 +1,13 @@
 package com.namso.pimark;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +73,10 @@ class SpecListAdapter extends ArrayAdapter<String> {
         TextView myTitle = (TextView) specRow.findViewById(R.id.specTitle);
         TextView myValue = (TextView) specRow.findViewById(R.id.specValue);
         ProgressBar progressBar = (ProgressBar) specRow.findViewById(R.id.progressBar);
+        TextView score = (TextView) benchRow.findViewById(R.id.textView4);
+
+        SharedPreferences localSharedPreferences = PreferenceManager.getDefaultSharedPreferences(benchRow.getContext());
+        score.setText(localSharedPreferences.getString("score","N/A"));
 
         myImage.setImageResource(specIcons.getResourceId(position, -1));
         myTitle.setText(specTitles[position]);
@@ -108,6 +115,7 @@ class SpecListAdapter extends ArrayAdapter<String> {
                 start.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        ((PiMark) context).toggleUpdatePi();
                         Benchmark piMark = new Benchmark(benchRow);
                         piMark.startBenchmark();
                     }

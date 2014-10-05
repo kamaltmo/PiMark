@@ -1,8 +1,10 @@
 package com.namso.pimark;
 
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.*;
 import android.os.Process;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ public class Benchmark {
     Apfloat c3_OVER_24;
     Apfloat sqrtC;
     Apfloat[][] totals;
+    Apfloat pi;
     Long startTime, endTime;
     AtomicInteger count = new AtomicInteger(0);
     ProgressDialog dialog;
@@ -61,12 +64,18 @@ public class Benchmark {
         }
     }
 
+    private void savePreferences(String paramString1, String paramString2) {
+        SharedPreferences.Editor localEditor = PreferenceManager.getDefaultSharedPreferences(rootView.getContext()).edit();
+        localEditor.putString(paramString1, paramString2);
+        localEditor.commit();
+    }
+
 
     public void startBenchmark() {
         int s = 0,e = 0; //store increaments for binaryspliting
         nCores = getNumCores();
         totals = new Apfloat[nCores][3];
-        int increment = (DIGITS/13)/nCores + 1;
+        int increment = (DIGITS/13)/nCores + 2;
         //Get start time
         startTime = System.currentTimeMillis();
 
@@ -107,8 +116,7 @@ public class Benchmark {
 
         @Override
         protected String doInBackground(int[]... ints) {
-            //Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-            Process.setThreadPriority(-19);
+            Process.setThreadPriority(-20);
             Apfloat[] results;
             int[] data = ints[0];
             results = bs(data[0], data[1]);
@@ -119,7 +127,7 @@ public class Benchmark {
             if (count.intValue() == nCores) {
                 //calulate final values and store them in results, then find pi
                 results = totalResult();
-                Apfloat pi = results[1].multiply(new Apfloat(426880).multiply(sqrtC)).divide(results[2]).precision(DIGITS);
+                pi = results[1].multiply(new Apfloat(426880).multiply(sqrtC)).divide(results[2]).precision(DIGITS);
             }
             return null;
         }
@@ -133,10 +141,12 @@ public class Benchmark {
                 endTime = endTime - startTime;
                 TextView score = (TextView) rootView.findViewById(R.id.textView4);
                 score.setText(endTime.toString());
+                savePreferences("pi", pi.toString());
+                savePreferences("score", endTime.toString());
             }
         }
 
-        public Apfloat[] bs(int s, int e) {
+        public Apfloat[] bs(long s, long e) {
             Apfloat[] results = new Apfloat[3];
             if (e - s == 1) {
                 if (s == 0) {
@@ -152,8 +162,8 @@ public class Benchmark {
             } else {
                 int m = (int) ((s + e)/2); //Find midpoint
 
-                Apfloat[] sM = bs(s, m).clone();
-                Apfloat[] mE = bs(m, e).clone();
+                Apfloat[] sM = bs(s, m);
+                Apfloat[] mE = bs(m, e);
 
                 results[0] = sM[0].multiply(mE[0]);
                 results[1] = sM[1].multiply(mE[1]);

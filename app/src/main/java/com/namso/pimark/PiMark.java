@@ -209,8 +209,8 @@ public class PiMark extends Activity {
                 case 2:
                     if (updateCompare) {
                         fragmentManager.beginTransaction()
-                                .remove(fragmentManager.findFragmentByTag("B"))
-                                .add(R.id.frame_container, fragments[1] = new CompareFragment(), "C")
+                                .remove(fragmentManager.findFragmentByTag("C"))
+                                .add(R.id.frame_container, fragments[2] = new CompareFragment(), "C")
                                 .commit();
                         updateCompare = false;
                     }

@@ -25,7 +25,8 @@ public class PiMark extends Activity {
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private Fragment[] fragments;
-    private boolean updatePi = true;
+    private boolean updatePi = false;
+    private boolean updateCompare = false;
     int position;
     FragmentManager fragmentManager = getFragmentManager();
 
@@ -206,6 +207,13 @@ public class PiMark extends Activity {
                                     .commit();
                             break;
                 case 2:
+                    if (updateCompare) {
+                        fragmentManager.beginTransaction()
+                                .remove(fragmentManager.findFragmentByTag("B"))
+                                .add(R.id.frame_container, fragments[1] = new CompareFragment(), "C")
+                                .commit();
+                        updateCompare = false;
+                    }
                     fragmentManager.beginTransaction()
                             .hide(fragments[1])
                             .hide(fragments[0])
@@ -224,7 +232,8 @@ public class PiMark extends Activity {
         }
     }
 
-    public void toggleUpdatePi(){
+    public void toggleUpdate(){
         updatePi = !updatePi;
+        updateCompare = !updateCompare;
     }
 }

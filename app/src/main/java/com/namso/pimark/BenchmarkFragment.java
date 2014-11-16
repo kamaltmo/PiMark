@@ -115,7 +115,7 @@ class SpecListAdapter extends ArrayAdapter<String> {
                 start.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        ((PiMark) context).toggleUpdatePi();
+                        ((PiMark) context).toggleUpdate();
                         Benchmark piMark = new Benchmark(benchRow);
                         piMark.startBenchmark();
                     }

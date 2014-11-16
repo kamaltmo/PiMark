@@ -6,6 +6,7 @@ import android.os.*;
 import android.os.Process;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.apfloat.Apfloat;
@@ -29,6 +30,7 @@ public class Benchmark {
     Long startTime, endTime;
     AtomicInteger count = new AtomicInteger(0);
     ProgressDialog dialog;
+    Button start;
     boolean visible = false; // shows if progressDialog has been started
     int DIGITS = 100000;
     int nCores;
@@ -37,6 +39,7 @@ public class Benchmark {
     public Benchmark(View view) {
         rootView = view;
         dialog = new ProgressDialog(rootView.getContext());
+        start = (Button) rootView.findViewById(R.id.button);
     }
 
     private int getNumCores() {
@@ -72,6 +75,7 @@ public class Benchmark {
 
 
     public void startBenchmark() {
+
         int s = 0,e = 0; //store increaments for binaryspliting
         nCores = getNumCores();
         totals = new Apfloat[nCores][3];
@@ -80,8 +84,8 @@ public class Benchmark {
         startTime = System.currentTimeMillis();
 
         //Calulate constant variables
-        c3_OVER_24 = ApfloatMath.pow((new Apfloat(640320)), 3).precision(DIGITS).divide(new Apfloat(24));
-        sqrtC = ApfloatMath.sqrt(new Apfloat(10005).precision(DIGITS));
+        c3_OVER_24 = ApfloatMath.pow((new Apfloat(640320L)), 3L).precision(DIGITS).divide(new Apfloat(24L));
+        sqrtC = ApfloatMath.sqrt(new Apfloat(10005L).precision(DIGITS));
 
         //Split calutation by cores and start threads
         for (int i = 0; i < nCores; i++) {
@@ -100,6 +104,7 @@ public class Benchmark {
         protected void onPreExecute() {
             super.onPreExecute();
             if (!visible) {
+                start.setClickable(false);
                 visible = true;
                 dialog.setMessage("Running Benchmark...");
                 dialog.setIndeterminate(false);
@@ -127,7 +132,7 @@ public class Benchmark {
             if (count.intValue() == nCores) {
                 //calulate final values and store them in results, then find pi
                 results = totalResult();
-                pi = results[1].multiply(new Apfloat(426880).multiply(sqrtC)).divide(results[2]).precision(DIGITS);
+                pi = results[1].multiply(new Apfloat(426880L).multiply(sqrtC)).divide(results[2]).precision(DIGITS);
             }
             return null;
         }
@@ -143,6 +148,7 @@ public class Benchmark {
                 score.setText(endTime.toString());
                 savePreferences("pi", pi.toString());
                 savePreferences("score", endTime.toString());
+                start.setClickable(true);
             }
         }
 
@@ -150,12 +156,12 @@ public class Benchmark {
             Apfloat[] results = new Apfloat[3];
             if (e - s == 1) {
                 if (s == 0) {
-                    results[0] = results[1] = new Apfloat(1);
+                    results[0] = results[1] = new Apfloat(1L);
                 } else {
-                    results[0] = new Apfloat((6*s-5)*(2*s-1)*(6*s-1));
-                    results[1] = c3_OVER_24.multiply(ApfloatMath.pow(new Apfloat(s), 3));
+                    results[0] = new Apfloat((6L*s-5L)*(2L*s-1L)*(6L*s-1L));
+                    results[1] = c3_OVER_24.multiply(ApfloatMath.pow(new Apfloat(s), 3L));
                 }
-                results[2] = results[0].multiply(new Apfloat(13591409).add(new Apfloat(545140134).multiply(new Apfloat(s))));
+                results[2] = results[0].multiply(new Apfloat(13591409L).add(new Apfloat(545140134L).multiply(new Apfloat(s))));
                 if (s % 2 == 1) {
                     results[2] = results[2].negate();
                 }
